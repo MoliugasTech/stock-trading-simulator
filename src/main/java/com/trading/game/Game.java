@@ -8,24 +8,30 @@ public class Game {
     private Player player;
     private Asset asset;
     private Market market;
+    private ConsoleUI ui;
     private int currentTurn;
     private int maxTurns;
     private boolean gameOver;
 
     public Game(double startingCash, int maxTurns) {
         this.player = new Player(startingCash);
-        this.asset = new Asset("STOCK", 100.0);
-        this.market = new Market(0.03); // 3% volatility
+        this.asset = new Asset("STOCK", GameConfig.STARTING_PRICE);
+        this.market = new Market(GameConfig.VOLATILITY);
+        this.ui = new ConsoleUI();
         this.currentTurn = 0;
         this.maxTurns = maxTurns;
         this.gameOver = false;
     }
 
     public void start() {
-        // Main game loop will be here
+        ui.displayWelcome();
+
         while (!gameOver && currentTurn < maxTurns) {
             playTurn();
         }
+
+        ui.displayFinalStats(player, asset, currentTurn);
+        ui.close();
     }
 
     public void playTurn() {
@@ -33,15 +39,54 @@ public class Game {
         double newPrice = market.generateNextPrice(asset.getCurrentPrice());
         asset.updatePrice(newPrice);
 
-        // 2. Display state (will add UI later)
+        // 2. Display state
+        ui.displayGameState(currentTurn + 1, maxTurns, player, asset);
 
-        // 3. Get player action (will add UI later)
+        // 3. Get player action
+        String action = ui.getPlayerAction();
 
         // 4. Process action
+        processAction(action);
 
         // 5. Check game over
         currentTurn++;
         checkGameOver();
+    }
+
+    private void processAction(String action) {
+        switch (action) {
+            case "B":
+                int buyAmount = ui.getAmount("buy");
+                boolean buySuccess = player.buyShares(buyAmount, asset.getCurrentPrice());
+                if (buySuccess) {
+                    ui.displayTransactionResult(true,
+                            "Bought " + buyAmount + " shares at $" +
+                                    String.format("%.2f", asset.getCurrentPrice()));
+                } else {
+                    ui.displayTransactionResult(false, "Insufficient funds!");
+                }
+                break;
+
+            case "S":
+                int sellAmount = ui.getAmount("sell");
+                boolean sellSuccess = player.sellShares(sellAmount, asset.getCurrentPrice());
+                if (sellSuccess) {
+                    ui.displayTransactionResult(true,
+                            "Sold " + sellAmount + " shares at $" +
+                                    String.format("%.2f", asset.getCurrentPrice()));
+                } else {
+                    ui.displayTransactionResult(false, "Not enough shares!");
+                }
+                break;
+
+            case "H":
+                ui.displayTransactionResult(true, "Holding position...");
+                break;
+
+            default:
+                ui.displayTransactionResult(false, "Invalid action!");
+                break;
+        }
     }
 
     private void checkGameOver() {
@@ -65,11 +110,5 @@ public class Game {
 
     public Asset getAsset() {
         return asset;
-    }
-
-    public double getFinalProfit() {
-        double totalValue = player.getCash() +
-                (player.getSharesOwned() * asset.getCurrentPrice());
-        return totalValue - 1000.0; // Starting cash was 1000
     }
 }
