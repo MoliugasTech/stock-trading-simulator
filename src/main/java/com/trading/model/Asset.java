@@ -1,18 +1,17 @@
 package com.trading.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Asset {
     private String name;
     private double currentPrice;
-    private List<Double> priceHistory;
+    private PriceHistory priceHistory;
 
     public Asset(String name, double initialPrice) {
         this.name = name;
         this.currentPrice = initialPrice;
-        this.priceHistory = new ArrayList<>();
-        this.priceHistory.add(initialPrice);
+        this.priceHistory = new PriceHistory(100); // Keep last 100 prices
+        this.priceHistory.addPrice(initialPrice);
     }
 
     public String getName() {
@@ -25,10 +24,14 @@ public class Asset {
 
     public void updatePrice(double newPrice) {
         this.currentPrice = newPrice;
-        this.priceHistory.add(newPrice);
+        this.priceHistory.addPrice(newPrice);
     }
 
     public List<Double> getPriceHistory() {
-        return new ArrayList<>(priceHistory);
+        return priceHistory.getAll();
+    }
+
+    public double getSMA(int period) {
+        return priceHistory.getSMA(period);
     }
 }
