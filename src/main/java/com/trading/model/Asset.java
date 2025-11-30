@@ -1,5 +1,7 @@
 package com.trading.model;
 
+import com.trading.model.observer.PriceObserver;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Asset {
@@ -7,6 +9,7 @@ public class Asset {
     private final AssetType type;
     private double currentPrice;
     private final PriceHistory priceHistory;
+    private final List<PriceObserver> observers;
 
     public Asset(String name, AssetType type, double initialPrice) {
         this.name = name;
@@ -14,6 +17,7 @@ public class Asset {
         this.currentPrice = initialPrice;
         this.priceHistory = new PriceHistory(100); // Keep last 100 prices
         this.priceHistory.addPrice(initialPrice);
+        this.observers = new ArrayList<>();
     }
 
     // Old constructor for backward compatibility
@@ -34,8 +38,12 @@ public class Asset {
     }
 
     public void updatePrice(double newPrice) {
+        double oldPrice = this.currentPrice;
         this.currentPrice = newPrice;
         this.priceHistory.addPrice(newPrice);
+
+        // Notify all observers
+        notifyObservers(oldPrice, newPrice);
     }
 
     public List<Double> getPriceHistory() {
@@ -44,5 +52,20 @@ public class Asset {
 
     public double getSMA(int period) {
         return priceHistory.getSMA(period);
+    }
+
+    // Observer pattern methods
+    public void addObserver(PriceObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(PriceObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers(double oldPrice, double newPrice) {
+        for (PriceObserver observer : observers) {
+            observer.onPriceChange(this, oldPrice, newPrice);
+        }
     }
 }
