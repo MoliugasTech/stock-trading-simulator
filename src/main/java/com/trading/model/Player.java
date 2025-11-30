@@ -18,6 +18,10 @@ public class Player {
     }
 
     public boolean buyShares(int amount, double pricePerShare) {
+        if (amount <= 0) {
+            return false; // Can't buy 0 or negative shares
+        }
+
         double cost = calculateCost(amount, pricePerShare);
 
         if (canAfford(cost)) {
@@ -30,6 +34,10 @@ public class Player {
     }
 
     public boolean sellShares(int amount, double pricePerShare) {
+        if (amount <= 0) {
+            return false; // Can't sell 0 or negative shares
+        }
+
         if (hasEnoughShares(amount)) {
             double revenue = calculateCost(amount, pricePerShare);
             cash += amount * pricePerShare;
