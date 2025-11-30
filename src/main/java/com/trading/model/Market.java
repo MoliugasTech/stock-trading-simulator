@@ -1,22 +1,24 @@
 package com.trading.model;
 
-import java.util.Random;
+import com.trading.model.strategy.PriceStrategy;
+import com.trading.model.strategy.RandomWalkStrategy;
 
 public class Market {
-    private Random random;
-    private double volatility;
+    private PriceStrategy priceStrategy;
 
     public Market(double volatility) {
-        this.random = new Random();
-        this.volatility = volatility;
+        this.priceStrategy = new RandomWalkStrategy(volatility);
+    }
+
+    public Market (PriceStrategy priceStrategy) {
+        this.priceStrategy = priceStrategy;
     }
 
     public double generateNextPrice(double currentPrice) {
-        // Random walk: price changes by ±volatility%
-        double changePercent = (random.nextDouble() - 0.5) * 2 * volatility;
-        double newPrice = currentPrice * (1 + changePercent);
+       return priceStrategy.generateNextPrice(currentPrice);
+    }
 
-        // Prevent negative prices
-        return Math.max(0.01, newPrice);
+    public void setPriceStrategy(PriceStrategy strategy) {
+        this.priceStrategy = strategy;
     }
 }

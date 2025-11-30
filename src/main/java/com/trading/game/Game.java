@@ -23,6 +23,16 @@ public class Game {
         this.gameOver = false;
     }
 
+    public Game(Player player, Asset asset, Market market, int maxTurns) {
+        this.player = player;
+        this.asset = asset;
+        this.market = market;
+        this.ui = null; // No UI for testing
+        this.currentTurn = 0;
+        this.maxTurns = maxTurns;
+        this.gameOver = false;
+    }
+
     public void start() {
         ui.displayWelcome();
 
@@ -40,13 +50,15 @@ public class Game {
         asset.updatePrice(newPrice);
 
         // 2. Display state
-        ui.displayGameState(currentTurn + 1, maxTurns, player, asset);
+        if (ui != null) {
+            ui.displayGameState(currentTurn + 1, maxTurns, player, asset);
 
-        // 3. Get player action
-        String action = ui.getPlayerAction();
+            // 3. Get player action
+            String action = ui.getPlayerAction();
 
-        // 4. Process action
-        processAction(action);
+            // 4. Process action
+            processAction(action);
+        }
 
         // 5. Check game over
         currentTurn++;
