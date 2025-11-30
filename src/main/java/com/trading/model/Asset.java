@@ -3,19 +3,30 @@ package com.trading.model;
 import java.util.List;
 
 public class Asset {
-    private String name;
+    private final String name;
+    private final AssetType type;
     private double currentPrice;
-    private PriceHistory priceHistory;
+    private final PriceHistory priceHistory;
 
-    public Asset(String name, double initialPrice) {
+    public Asset(String name, AssetType type, double initialPrice) {
         this.name = name;
+        this.type = type;
         this.currentPrice = initialPrice;
         this.priceHistory = new PriceHistory(100); // Keep last 100 prices
         this.priceHistory.addPrice(initialPrice);
     }
 
+    // Old constructor for backward compatibility
+    public Asset(String name, double initialPrice) {
+        this(name, AssetType.STOCK, initialPrice);
+    }
+
     public String getName() {
         return name;
+    }
+
+    public AssetType getType() {
+        return type;
     }
 
     public double getCurrentPrice() {
