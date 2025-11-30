@@ -18,9 +18,9 @@ public class Player {
     }
 
     public boolean buyShares(int amount, double pricePerShare) {
-        double cost = amount * pricePerShare;
+        double cost = calculateCost(amount, pricePerShare);
 
-        if (cash >= cost) {
+        if (canAfford(cost)) {
             cash -= cost;
             sharesOwned += amount;
             return true;
@@ -30,12 +30,29 @@ public class Player {
     }
 
     public boolean sellShares(int amount, double pricePerShare) {
-        if (sharesOwned >= amount) {
+        if (hasEnoughShares(amount)) {
+            double revenue = calculateCost(amount, pricePerShare);
             cash += amount * pricePerShare;
             sharesOwned -= amount;
             return true;
         }
-
         return false;
+    }
+
+    // Helper methods (DRY)
+    private double calculateCost(int amount, double pricePerShare) {
+        return amount * pricePerShare;
+    }
+
+    private boolean canAfford(double cost) {
+        return cash >= cost;
+    }
+
+    private boolean hasEnoughShares(int amount) {
+        return sharesOwned >= amount;
+    }
+
+    public double getPortfolioValue(double currentPrice) {
+        return cash + (sharesOwned * currentPrice);
     }
 }

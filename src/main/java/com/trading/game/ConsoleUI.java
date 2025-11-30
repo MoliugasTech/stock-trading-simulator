@@ -12,6 +12,20 @@ public class ConsoleUI {
         this.scanner = new Scanner(System.in);
     }
 
+    private void printHeader(String title) {
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println(title);
+        System.out.println("=".repeat(50));
+    }
+
+    private void printPrice(String label, double price) {
+        System.out.printf("%s: $%.2f%n", label, price);
+    }
+
+    private void printPortfolioLine(String label, String value) {
+        System.out.printf("   %s: %s%n", label, value);
+    }
+
     public void displayWelcome() {
         System.out.println("╔═══════════════════════════════════════╗");
         System.out.println("║     STOCK TRADING SIMULATOR           ║");
@@ -20,22 +34,18 @@ public class ConsoleUI {
     }
 
     public void displayGameState(int turn, int maxTurns, Player player, Asset asset) {
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println("Turn: " + turn + "/" + maxTurns);
-        System.out.println("=".repeat(50));
-        System.out.println();
+        printHeader("Turn: " + turn + "/" + maxTurns);
 
-        System.out.printf("Current Price: $%.2f%n", asset.getCurrentPrice());
-        System.out.printf("SMA(10): $%.2f%n", asset.getSMA(10));
+        printPrice("Current Price", asset.getCurrentPrice());
+        printPrice("SMA(10)", asset.getSMA(10));
         System.out.println();
 
         System.out.println("💰 Your Portfolio:");
-        System.out.printf("   Cash: $%.2f%n", player.getCash());
-        System.out.printf("   Shares: %d%n", player.getSharesOwned());
+        printPortfolioLine("Cash", String.format("$%.2f", player.getCash()));
+        printPortfolioLine("Shares", String.valueOf(player.getSharesOwned()));
 
-        double portfolioValue = player.getCash() +
-                (player.getSharesOwned() * asset.getCurrentPrice());
-        System.out.printf("   Total Value: $%.2f%n", portfolioValue);
+        double portfolioValue = player.getPortfolioValue(asset.getCurrentPrice());
+        printPortfolioLine("Total Value", String.format("$%.2f", portfolioValue));
         System.out.println();
     }
 
@@ -68,21 +78,21 @@ public class ConsoleUI {
     }
 
     public void displayFinalStats(Player player, Asset asset, int turns) {
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println("GAME OVER!");
-        System.out.println("=".repeat(50));
-        System.out.println();
+        printHeader("GAME OVER!");
 
-        double finalValue = player.getCash() +
-                (player.getSharesOwned() * asset.getCurrentPrice());
+        double finalValue = player.getPortfolioValue(asset.getCurrentPrice());
         double profit = finalValue - GameConfig.STARTING_CASH;
         double profitPercent = (profit / GameConfig.STARTING_CASH) * 100;
 
-        System.out.printf("Final Portfolio Value: $%.2f%n", finalValue);
+        printPrice("Final Portfolio Value", finalValue);
         System.out.printf("Profit/Loss: $%.2f (%.1f%%)%n", profit, profitPercent);
         System.out.printf("Turns played: %d%n", turns);
         System.out.println();
 
+        printGameResult(profit);
+    }
+
+    private void printGameResult(double profit) {
         if (profit > 0) {
             System.out.println("🎉 Congratulations! You made a profit!");
         } else if (profit < 0) {
