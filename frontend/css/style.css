@@ -174,3 +174,139 @@ section h2 {
     overflow-y: auto;
     white-space: pre-wrap;
 }
+
+/* ==========================================
+   RESPONSIVE DESIGN - MEDIA QUERIES
+   ========================================== */
+
+/* TABLET (768px and up) */
+@media (min-width: 768px) {
+    body {
+        padding: 30px;
+    }
+
+    header h1 {
+        font-size: 2.5rem;
+    }
+
+    header p {
+        font-size: 1.1rem;
+    }
+
+    /* Status grid - 4 columns in one row */
+    .status-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .status-item .value {
+        font-size: 1.75rem;
+    }
+
+    /* Info grid - horizontal layout */
+    .info-grid {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .info-item {
+        flex: 1;
+        margin: 0 5px;
+    }
+
+    /* Buttons inline */
+    .button-group {
+        justify-content: flex-start;
+    }
+
+    .btn {
+        flex: 0 1 auto;
+        min-width: 140px;
+    }
+
+    section h2 {
+        font-size: 1.4rem;
+    }
+}
+
+/* DESKTOP (1024px and up) */
+@media (min-width: 1024px) {
+    body {
+        padding: 40px;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        max-width: 1400px;
+    }
+
+    /* Header spans full width */
+    header {
+        grid-column: 1 / -1;
+    }
+
+    /* Status spans full width */
+    #status {
+        grid-column: 1 / -1;
+    }
+
+    /* Asset info - left column */
+    #asset-info {
+        grid-column: 1 / 2;
+    }
+
+    /* Actions - right column, same row */
+    #actions {
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+    }
+
+    /* Log - full width below */
+    #log {
+        grid-column: 1 / -1;
+    }
+
+    header h1 {
+        font-size: 3rem;
+    }
+
+    .status-item .value {
+        font-size: 2rem;
+    }
+
+    #logContent {
+        min-height: 200px;
+    }
+}
+
+/* LARGE DESKTOP (1440px and up) */
+@media (min-width: 1440px) {
+    .status-item .value {
+        font-size: 2.25rem;
+    }
+
+    section {
+        padding: 30px;
+    }
+}
+
+/* MOBILE LANDSCAPE (small height) */
+@media (max-height: 600px) and (orientation: landscape) {
+    header {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    #logContent {
+        max-height: 150px;
+    }
+}
