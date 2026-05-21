@@ -39,7 +39,6 @@ public class Player {
         }
 
         if (hasEnoughShares(amount)) {
-            double revenue = calculateCost(amount, pricePerShare);
             cash += amount * pricePerShare;
             sharesOwned -= amount;
             return true;

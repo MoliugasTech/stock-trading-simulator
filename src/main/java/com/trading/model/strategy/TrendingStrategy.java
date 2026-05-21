@@ -4,13 +4,11 @@ import java.util.Random;
 
 public class TrendingStrategy implements PriceStrategy {
     private final Random random;
-    private final double trendStrength;
     private final double volatility;
     private double currentTrend;
 
     public TrendingStrategy(double trendStrength, double volatility) {
         this.random = new Random();
-        this.trendStrength = trendStrength;
         this.volatility = volatility;
         this.currentTrend = (random.nextBoolean() ? 1 : -1) * trendStrength;
     }
