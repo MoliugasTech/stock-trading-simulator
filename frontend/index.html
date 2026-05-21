@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Simulator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Stock Trading Simulator</h1>
+            <p>Akcijų prekybos simuliatorius</p>
+        </header>
+
+        <!-- Status Section -->
+        <section id="status">
+            <h2>Būsena</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="label">Grynieji:</span>
+                    <span id="cash" class="value">$0.00</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Akcijos:</span>
+                    <span id="shares" class="value">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Ėjimas:</span>
+                    <span id="turn" class="value">0/30</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Vertė:</span>
+                    <span id="portfolio" class="value">$0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Asset Info Section -->
+        <section id="asset-info">
+            <h2>Turtas</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Pavadinimas:</span>
+                    <span id="assetName" class="value">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Kaina:</span>
+                    <span id="price" class="value">$0.00</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">SMA(10):</span>
+                    <span id="sma" class="value">$0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actions Section -->
+        <section id="actions">
+            <h2>Veiksmai</h2>
+            <div class="button-group">
+                <button id="startBtn" class="btn btn-primary">Pradėti žaidimą</button>
+                <button id="buyBtn" class="btn btn-success" disabled>Pirkti</button>
+                <button id="sellBtn" class="btn btn-danger" disabled>Parduoti</button>
+                <button id="holdBtn" class="btn btn-secondary" disabled>Laukti</button>
+            </div>
+        </section>
+
+        <!-- Log Section -->
+        <section id="log">
+            <h2>Žurnalas</h2>
+            <div id="logContent">Paspauskite "Pradėti žaidimą" kad pradėtumėte...</div>
+        </section>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/api.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
